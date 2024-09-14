@@ -320,7 +320,10 @@ nodeShell:
     tag: "v1.27.16"
     pullPolicy: IfNotPresent
 
-cloud:
+# Telemetry collects aggregated information about the versions of KubeSphere, Kubernetes, and the extensions used.
+# KubeSphere Cloud uses this information to help improve the product and does not share it with third-parties.
+# If you prefer not to share this data, you can keep this setting disabled.
+telemetry:
   enabled: true
 
 extension:
@@ -431,3 +434,12 @@ ksCRDs:
       requests:
         cpu: 20m
         memory: 100Mi
+
+# add museum for all ks-extensions
+ksExtensionRepository:
+  enabled: true
+  image:
+    registry: ""
+    repository: kubesphere/ks-extensions-museum
+    tag: "latest"
+    pullPolicy: Always
