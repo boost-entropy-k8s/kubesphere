@@ -94,10 +94,12 @@ func (r *AppReleaseReconciler) SetupWithManager(mgr *controller.Manager) error {
 		Watches(
 			&clusterv1alpha1.Cluster{},
 			handler.EnqueueRequestsFromMapFunc(r.mapper),
-			builder.WithPredicates(ClusterDeletePredicate{}),
+			builder.WithPredicates(DeletePredicate{}),
 		).
 		WithEventFilter(IgnoreAnnotationChangePredicate{AnnotationKey: appv2.TimeoutRecheck}).
-		For(&appv2.ApplicationRelease{}).Complete(r)
+		For(&appv2.ApplicationRelease{}).
+		Named(helminstallerController).
+		Complete(r)
 }
 
 func (r *AppReleaseReconciler) mapper(ctx context.Context, o client.Object) (requests []reconcile.Request) {

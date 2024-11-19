@@ -298,7 +298,12 @@ func UpdateLatestAppVersion(ctx context.Context, client runtimeclient.Client, ap
 			klog.Warningf("failed to parse version: %s, use first version %s", v.Spec.VersionName, latestAppVersion)
 			continue
 		}
-		if parsedVersion.GT(semver.MustParse(strings.TrimPrefix(latestAppVersion, "v"))) {
+		oldLatestAppVersion, err := semver.Parse(strings.TrimPrefix(latestAppVersion, "v"))
+		if err != nil {
+			klog.Warningf("failed to parse oldLatestAppVersion: %s", latestAppVersion)
+			continue
+		}
+		if parsedVersion.GT(oldLatestAppVersion) {
 			latestAppVersion = v.Spec.VersionName
 		}
 	}
@@ -576,7 +581,6 @@ func FormatVersion(input string) string {
 	}
 	hash := sha1.Sum([]byte(input))
 	formattedVersion := hex.EncodeToString(hash[:])[:12]
-	klog.Warningf("Version: %s does not meet the Kubernetes naming standard, replacing with SHA-1 hash: %s", input, formattedVersion)
 	return formattedVersion
 }
 
