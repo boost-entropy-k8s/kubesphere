@@ -1,3 +1,9 @@
+/*
+ * Copyright 2024 the KubeSphere Authors.
+ * Please refer to the LICENSE file in the root directory of the project.
+ * https://github.com/kubesphere/kubesphere/blob/master/LICENSE
+ */
+
 package v1alpha1
 
 import (
@@ -99,12 +105,4 @@ type ProvisionerCapabilityList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
 	Items           []ProvisionerCapability `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(
-		&StorageClassCapability{},
-		&StorageClassCapabilityList{},
-		&ProvisionerCapability{},
-		&ProvisionerCapabilityList{})
 }

@@ -1,3 +1,9 @@
+/*
+ * Copyright 2024 the KubeSphere Authors.
+ * Please refer to the LICENSE file in the root directory of the project.
+ * https://github.com/kubesphere/kubesphere/blob/master/LICENSE
+ */
+
 package v1alpha1
 
 import (
@@ -10,6 +16,7 @@ const (
 	ResourceKindCluster      = "Cluster"
 	ResourcesSingularCluster = "cluster"
 	ResourcesPluralCluster   = "clusters"
+	ResourcesPluralLabel     = "labels"
 
 	HostCluster = "cluster-role.kubesphere.io/host"
 	// ClusterRegion is the description of which region the cluster been placed
@@ -25,6 +32,10 @@ const (
 
 	ClusterRoleHost   ClusterRole = "host"
 	ClusterRoleMember ClusterRole = "member"
+
+	ClusterLabelIDsAnnotation = "cluster.kubesphere.io/label-ids"
+	LabelFinalizer            = "finalizers.kubesphere.io/cluster-label"
+	ClusterLabelFormat        = "label.cluster.kubesphere.io/%s"
 )
 
 type ClusterRole string
@@ -197,6 +208,31 @@ type ClusterList struct {
 	Items           []Cluster `json:"items"`
 }
 
-func init() {
-	SchemeBuilder.Register(&Cluster{}, &ClusterList{})
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:scope=Cluster
+// +kubebuilder:printcolumn:name="Key",type=string,JSONPath=".spec.key"
+// +kubebuilder:printcolumn:name="Value",type=string,JSONPath=".spec.value"
+
+type Label struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec LabelSpec `json:"spec"`
+}
+
+type LabelSpec struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+	// +optional
+	BackgroundColor string `json:"backgroundColor,omitempty"`
+	// +optional
+	Clusters []string `json:"clusters,omitempty"`
+}
+
+// +kubebuilder:object:root=true
+
+type LabelList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []Label `json:"items"`
 }

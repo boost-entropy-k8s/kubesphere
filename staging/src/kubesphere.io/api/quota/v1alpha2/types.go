@@ -1,3 +1,9 @@
+/*
+ * Copyright 2024 the KubeSphere Authors.
+ * Please refer to the LICENSE file in the root directory of the project.
+ * https://github.com/kubesphere/kubesphere/blob/master/LICENSE
+ */
+
 package v1alpha2
 
 import (
@@ -10,10 +16,6 @@ const (
 	ResourcesSingularCluster = "resourcequota"
 	ResourcesPluralCluster   = "resourcequotas"
 )
-
-func init() {
-	SchemeBuilder.Register(&ResourceQuota{}, &ResourceQuotaList{})
-}
 
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:categories="quota",scope="Cluster",path=resourcequotas
